@@ -13,14 +13,11 @@ interface LoginModalProps {
 
 interface FormErrors {
   email?: string;
-  password?: string;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSignUp, setIsSignUp] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -31,12 +28,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
       newErrors.email = 'Email deve terminar com @sicoob.com.br';
     }
 
-    if (!password.trim()) {
-      newErrors.password = 'Senha é obrigatória';
-    } else if (password.length !== 4 || !/^\d{4}$/.test(password)) {
-      newErrors.password = 'Senha deve ter exatamente 4 números';
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,9 +36,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
     e.preventDefault();
     
     if (validateForm()) {
-      onLogin(email.trim(), password.trim());
+      onLogin(email.trim(), '');
       setEmail('');
-      setPassword('');
       setErrors({});
     }
   };
@@ -58,7 +48,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-center">
             <Building2 className="h-5 w-5 text-primary" />
-            {isSignUp ? 'Criar Conta' : 'Login'} - Sistema de Agendamento
+            Login - Sistema de Agendamento
           </DialogTitle>
         </DialogHeader>
         
@@ -81,39 +71,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Senha (4 números)</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="1234"
-              maxLength={4}
-              className={errors.password ? 'border-destructive' : ''}
-            />
-            {errors.password && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{errors.password}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-
           <Button type="submit" className="w-full">
-            {isSignUp ? 'Criar Conta' : 'Entrar'}
+            Entrar
           </Button>
-          
-          <div className="text-center">
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm"
-            >
-              {isSignUp ? 'Já tem conta? Fazer login' : 'Não tem conta? Criar uma'}
-            </Button>
-          </div>
         </form>
       </DialogContent>
     </Dialog>

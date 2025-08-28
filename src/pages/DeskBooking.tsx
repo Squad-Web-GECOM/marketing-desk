@@ -75,8 +75,10 @@ const DeskBooking: React.FC = () => {
   const generateAvailableDates = () => {
     const dates: string[] = [];
     const today = new Date();
+    let daysAdded = 0;
+    let i = 0;
     
-    for (let i = 0; i <= 7; i++) {
+    while (daysAdded < 6) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       
@@ -84,7 +86,9 @@ const DeskBooking: React.FC = () => {
       const dayOfWeek = date.getDay();
       if (dayOfWeek >= 1 && dayOfWeek <= 5) {
         dates.push(date.toISOString().split('T')[0]);
+        daysAdded++;
       }
+      i++;
     }
     
     setAvailableDates(dates);
@@ -245,7 +249,7 @@ const DeskBooking: React.FC = () => {
     return !getUserReservationForDate();
   };
 
-  const handleLogin = (email: string, password: string) => {
+  const handleLogin = (email: string) => {
     // Extract name from email (before @sicoob.com.br)
     const name = email.split('@')[0];
     
@@ -372,7 +376,7 @@ const DeskBooking: React.FC = () => {
                       variant={selectedDate === date ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setSelectedDate(date)}
-                      className="mb-2 flex flex-col items-center px-2 py-3 min-w-[80px] text-center"
+                      className="mb-2 h-full flex flex-col items-center px-2 py-3 min-w-[80px] text-center"
                     >
                       <span className="font-medium text-xs">{getDayName(date)}</span>
                       <span className="text-xs mt-1">{formatDate(date).split('/').slice(0,2).join('/')}</span>
