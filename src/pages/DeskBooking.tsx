@@ -82,16 +82,13 @@ const DeskBooking: React.FC = () => {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       
-      // Check if it's a weekday (Monday = 1, Friday = 5, exclude Sunday = 0 and Saturday = 6)
+      // Check if it's a weekday (Monday = 1, Friday = 5)
       const dayOfWeek = date.getDay();
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude Sunday (0) and Saturday (6)
+      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
         dates.push(date.toISOString().split('T')[0]);
         daysAdded++;
       }
       i++;
-      
-      // Safety check to prevent infinite loop
-      if (i > 20) break;
     }
     
     setAvailableDates(dates);
