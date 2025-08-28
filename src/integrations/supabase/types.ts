@@ -81,16 +81,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_desk_availability: {
-        Args: { check_date: string }
-        Returns: {
-          desk_number: number
-          is_my_reservation: boolean
-          is_occupied: boolean
-          reservation_id: number
-          user_name: string
-        }[]
-      }
       is_valid_booking_date: {
         Args: { check_date: string }
         Returns: boolean
