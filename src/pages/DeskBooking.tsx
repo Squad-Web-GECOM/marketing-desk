@@ -15,6 +15,14 @@ interface Desk {
   specs?: any;
 }
 
+interface DeskAvailability {
+  desk_number: number;
+  is_occupied: boolean;
+  is_my_reservation: boolean;
+  reservation_id: number | null;
+  user_name: string | null;
+}
+
 interface Reservation {
   id: number;
   date: string;
@@ -38,7 +46,8 @@ const DeskBooking: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
-  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [deskAvailability, setDeskAvailability] = useState<DeskAvailability[]>([]);
+  const [userReservations, setUserReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null);
 
@@ -122,14 +131,27 @@ const DeskBooking: React.FC = () => {
     
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('reservations')
-        .select('*')
-        .eq('date', selectedDate)
-        .is('canceled_at', null);
+      
+      // Use the secure function to get desk availability
+      const { data: availabilityData, error: availabilityError } = await supabase
+        .rpc('get_desk_availability', { check_date: selectedDate });
 
-      if (error) throw error;
-      setReservations(data || []);
+      if (availabilityError) throw availabilityError;
+      setDeskAvailability(availabilityData || []);
+
+      // Load user's own reservations separately for full details
+      if (currentUser) {
+        const { data: userReservationsData, error: userReservationsError } = await supabase
+          .from('reservations')
+          .select('*')
+          .eq('date', selectedDate)
+          .eq('user_id', currentUser.id)
+          .is('canceled_at', null);
+
+        if (userReservationsError) throw userReservationsError;
+        setUserReservations(userReservationsData || []);
+      }
+      
     } catch (error) {
       console.error('Error loading reservations:', error);
       setMessage({
@@ -241,11 +263,11 @@ const DeskBooking: React.FC = () => {
   };
 
   const getUserReservationForDate = (): Reservation | undefined => {
-    return reservations.find(r => r.user_id === currentUser?.id);
+    return userReservations.find(r => r.user_id === currentUser?.id);
   };
 
-  const getDeskReservation = (deskNumber: number): Reservation | undefined => {
-    return reservations.find(r => r.desk_number === deskNumber);
+  const getDeskAvailabilityInfo = (deskNumber: number): DeskAvailability | undefined => {
+    return deskAvailability.find(d => d.desk_number === deskNumber);
   };
 
   const canUserBookMore = (): boolean => {
@@ -275,7 +297,8 @@ const DeskBooking: React.FC = () => {
     setCurrentUser(null);
     localStorage.removeItem('sicoob-user');
     setShowLoginModal(true);
-    setReservations([]);
+    setUserReservations([]);
+    setDeskAvailability([]);
     setMessage(null);
   };
 
@@ -424,9 +447,9 @@ const DeskBooking: React.FC = () => {
               ) : (
                 <div className="row">
                   {desks.map((desk) => {
-                    const reservation = getDeskReservation(desk.number);
-                    const isOccupied = !!reservation;
-                    const isMyReservation = reservation?.user_id === currentUser.id;
+                    const deskInfo = getDeskAvailabilityInfo(desk.number);
+                    const isOccupied = deskInfo?.is_occupied || false;
+                    const isMyReservation = deskInfo?.is_my_reservation || false;
                     const canBook = !isOccupied && canUserBookMore();
 
                     return (
@@ -466,19 +489,25 @@ const DeskBooking: React.FC = () => {
                             </div>
                           </CardHeader>
                           <CardContent className="pt-0">
-                            {isOccupied && (
+                            {isMyReservation && deskInfo?.user_name && (
                               <p className="text-sm text-muted-foreground mb-3">
                                 <User size={14} className="mr-1" />
-                                {reservation.user_name}
+                                {deskInfo.user_name}
+                              </p>
+                            )}
+                            {isOccupied && !isMyReservation && (
+                              <p className="text-sm text-muted-foreground mb-3">
+                                <User size={14} className="mr-1" />
+                                Ocupada
                               </p>
                             )}
                             
                             <div className="mt-auto">
-                              {isMyReservation ? (
+                              {isMyReservation && deskInfo?.reservation_id ? (
                                 <Button
                                   variant="destructive"
                                   size="sm"
-                                  onClick={() => cancelReservation(reservation.id, desk.number)}
+                                  onClick={() => cancelReservation(deskInfo.reservation_id!, desk.number)}
                                   disabled={loading}
                                   className="w-100"
                                 >
