@@ -10,6 +10,9 @@
     <!-- Bootstrap 4.2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
     <!-- jQuery and Bootstrap 4.2 JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -27,9 +30,131 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <!-- Header -->
+    <header class="header-dark text-white py-3 shadow">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1 class="h4 mb-0 font-weight-bold">
+            Ferramenta de agendamento de mesas da área de marketing
+          </h1>
+          <div class="d-flex align-items-center">
+            <svg class="mr-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="font-weight-medium" id="userName">Carregando...</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container py-4">
+      <!-- Message Alert -->
+      <div id="messageAlert" class="alert alert-dismissible mb-4" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">
+          <span>&times;</span>
+        </button>
+        <div class="d-flex align-items-center">
+          <svg class="mr-2" width="16" height="16" id="messageIcon">
+            <circle cx="8" cy="8" r="8"></circle>
+          </svg>
+          <span id="messageText"></span>
+        </div>
+      </div>
+
+      <!-- Date Selector -->
+      <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header bg-light">
+          <h5 class="card-title mb-0 d-flex align-items-center">
+            <svg class="mr-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Selecionar Data
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 mb-3">
+              <div class="d-flex flex-wrap">
+                <button type="button" class="btn btn-outline-primary btn-sm mr-2 mb-2" id="todayBtn">
+                  Hoje
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm mb-2" id="nextWeekBtn">
+                  Próxima semana
+                </button>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex flex-wrap" id="dateButtons">
+                <!-- Date buttons will be generated here -->
+              </div>
+            </div>
+          </div>
+          
+          <div id="selectedDateInfo" class="mt-3 p-3 bg-primary-light rounded border-left-primary" style="display: none;">
+            <p class="mb-0 font-weight-medium text-primary">
+              Data selecionada: <span id="selectedDateText"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desk Grid -->
+      <div class="card border-0 shadow-sm" id="deskGrid" style="display: none;">
+        <div class="card-header bg-light">
+          <h5 class="card-title mb-0 d-flex align-items-center">
+            <svg class="mr-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Mesas Disponíveis - <span id="deskGridDate"></span>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Carregando...</span>
+            </div>
+            <p class="mt-2 text-muted">Carregando mesas...</p>
+          </div>
+          
+          <div class="row" id="desksContainer">
+            <!-- Desk cards will be generated here -->
+          </div>
+
+          <div id="noDesksMessage" class="text-center py-5" style="display: none;">
+            <svg class="mx-auto mb-3 text-muted" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p class="text-muted">Nenhuma mesa ativa encontrada.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Authentication Error -->
+    <div id="authError" class="container py-4" style="display: none;">
+      <div class="alert alert-danger">
+        <div class="d-flex align-items-center">
+          <svg class="mr-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          Usuário não identificado. É necessário estar autenticado no Liferay.
+        </div>
+      </div>
+    </div>
+
     <!-- Mock Liferay User (remove in production) -->
-    <script src="/liferay-user-mock.js"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script src="liferay-user-mock.js"></script>
+    
+    <!-- Main Application Script -->
+    <script src="app.js"></script>
   </body>
 </html>
