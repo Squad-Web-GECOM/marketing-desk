@@ -14,13 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      desks: {
+        Row: {
+          id: number
+          is_active: boolean
+          number: number
+          specs: Json | null
+        }
+        Insert: {
+          id?: number
+          is_active?: boolean
+          number: number
+          specs?: Json | null
+        }
+        Update: {
+          id?: number
+          is_active?: boolean
+          number?: number
+          specs?: Json | null
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          canceled_at: string | null
+          canceled_by: string | null
+          created_at: string
+          date: string
+          desk_number: number
+          id: number
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          canceled_at?: string | null
+          canceled_by?: string | null
+          created_at?: string
+          date: string
+          desk_number: number
+          id?: number
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          canceled_at?: string | null
+          canceled_by?: string | null
+          created_at?: string
+          date?: string
+          desk_number?: number
+          id?: number
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_desk_number_fkey"
+            columns: ["desk_number"]
+            isOneToOne: false
+            referencedRelation: "desks"
+            referencedColumns: ["number"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_valid_booking_date: {
+        Args: { check_date: string }
+        Returns: boolean
+      }
+      is_weekday: {
+        Args: { check_date: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
