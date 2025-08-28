@@ -4,7 +4,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, CheckCircle2, Calendar, User, MapPin } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Calendar, User, MapPin, LogOut, Building2 } from 'lucide-react';
+import LoginModal from '@/components/LoginModal';
 
 // Types
 interface Desk {
@@ -25,19 +26,15 @@ interface Reservation {
   canceled_by?: string;
 }
 
-interface LiferayUser {
+interface User {
   id: string;
   name: string;
-}
-
-declare global {
-  interface Window {
-    LIFERAY_USER?: LiferayUser;
-  }
+  email: string;
 }
 
 const DeskBooking: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<LiferayUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [desks, setDesks] = useState<Desk[]>([]);
@@ -47,15 +44,18 @@ const DeskBooking: React.FC = () => {
 
   // Initialize user and dates
   useEffect(() => {
-    // Check for Liferay user
-    if (window.LIFERAY_USER?.id && window.LIFERAY_USER?.name) {
-      setCurrentUser(window.LIFERAY_USER);
+    // Check for logged user in localStorage
+    const savedUser = localStorage.getItem('sicoob-user');
+    if (savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('sicoob-user');
+        setShowLoginModal(true);
+      }
     } else {
-      setMessage({
-        type: 'error',
-        text: 'Usuário não identificado. É necessário estar autenticado no Liferay.'
-      });
-      return;
+      setShowLoginModal(true);
     }
 
     // Generate available dates (today + 7 days, weekdays only)
@@ -245,37 +245,80 @@ const DeskBooking: React.FC = () => {
     return !getUserReservationForDate();
   };
 
+  const handleLogin = (name: string, email: string) => {
+    const user: User = {
+      id: email, // Use email as ID
+      name,
+      email
+    };
+    
+    setCurrentUser(user);
+    localStorage.setItem('sicoob-user', JSON.stringify(user));
+    setShowLoginModal(false);
+    setMessage({
+      type: 'success',
+      text: `Bem-vindo(a), ${name}!`
+    });
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('sicoob-user');
+    setShowLoginModal(true);
+    setReservations([]);
+    setMessage(null);
+  };
+
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Usuário não identificado. É necessário estar autenticado no Liferay.
-            </AlertDescription>
-          </Alert>
+      <>
+        <LoginModal open={showLoginModal} onLogin={handleLogin} />
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-center">
+            <Building2 className="mx-auto h-12 w-12 text-primary mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">
+              Sistema de Agendamento de Mesas
+            </h1>
+            <p className="text-muted-foreground">
+              Faça login para acessar o sistema
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-brand-dark text-brand-light py-4 shadow-lg">
-        <div className="container mx-auto px-4">
-          <div className="d-flex justify-content-between align-items-center">
-            <h1 className="h4 mb-0 font-weight-bold">
-              Ferramenta de agendamento de mesas da área de marketing
-            </h1>
-            <div className="d-flex align-items-center">
-              <User className="mr-2" size={20} />
-              <span className="font-weight-medium">{currentUser.name}</span>
+    <>
+      <LoginModal open={showLoginModal} onLogin={handleLogin} />
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="bg-brand-dark text-brand-light py-4 shadow-lg">
+          <div className="container mx-auto px-4">
+            <div className="d-flex justify-content-between align-items-center">
+              <h1 className="h4 mb-0 font-weight-bold">
+                Ferramenta de agendamento de mesas da área de marketing
+              </h1>
+              <div className="d-flex align-items-center gap-3">
+                <div className="d-flex align-items-center">
+                  <User className="mr-2" size={20} />
+                  <div className="d-flex flex-column">
+                    <span className="font-weight-medium">{currentUser.name}</span>
+                    <small className="text-brand-light/80">{currentUser.email}</small>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="text-brand-light hover:bg-brand-light/10"
+                >
+                  <LogOut size={16} />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       <div className="container mx-auto px-4 py-6">
         {/* Message Alert */}
@@ -483,6 +526,7 @@ const DeskBooking: React.FC = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
