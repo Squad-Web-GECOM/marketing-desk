@@ -8,30 +8,33 @@ import { AlertCircle, Building2 } from 'lucide-react';
 
 interface LoginModalProps {
   open: boolean;
-  onLogin: (name: string, email: string) => void;
+  onLogin: (email: string, password: string) => void;
 }
 
 interface FormErrors {
-  name?: string;
   email?: string;
+  password?: string;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!name.trim()) {
-      newErrors.name = 'Nome é obrigatório';
-    }
-
     if (!email.trim()) {
       newErrors.email = 'Email é obrigatório';
-    } else if (!email.endsWith('@sicoob')) {
-      newErrors.email = 'Email deve terminar com @sicoob';
+    } else if (!email.endsWith('@sicoob.com.br')) {
+      newErrors.email = 'Email deve terminar com @sicoob.com.br';
+    }
+
+    if (!password.trim()) {
+      newErrors.password = 'Senha é obrigatória';
+    } else if (password.length !== 4 || !/^\d{4}$/.test(password)) {
+      newErrors.password = 'Senha deve ter exatamente 4 números';
     }
 
     setErrors(newErrors);
@@ -42,9 +45,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
     e.preventDefault();
     
     if (validateForm()) {
-      onLogin(name.trim(), email.trim());
-      setName('');
+      onLogin(email.trim(), password.trim());
       setEmail('');
+      setPassword('');
       setErrors({});
     }
   };
@@ -55,29 +58,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-center">
             <Building2 className="h-5 w-5 text-primary" />
-            Login - Sistema de Agendamento
+            {isSignUp ? 'Criar Conta' : 'Login'} - Sistema de Agendamento
           </DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nome completo</Label>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Digite seu nome completo"
-              className={errors.name ? 'border-destructive' : ''}
-            />
-            {errors.name && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{errors.name}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -85,7 +70,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seuemail@sicoob"
+              placeholder="seuemail@sicoob.com.br"
               className={errors.email ? 'border-destructive' : ''}
             />
             {errors.email && (
@@ -96,9 +81,39 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onLogin }) => {
             )}
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="password">Senha (4 números)</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="1234"
+              maxLength={4}
+              className={errors.password ? 'border-destructive' : ''}
+            />
+            {errors.password && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{errors.password}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+
           <Button type="submit" className="w-full">
-            Entrar
+            {isSignUp ? 'Criar Conta' : 'Entrar'}
           </Button>
+          
+          <div className="text-center">
+            <Button
+              type="button"
+              variant="link"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm"
+            >
+              {isSignUp ? 'Já tem conta? Fazer login' : 'Não tem conta? Criar uma'}
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

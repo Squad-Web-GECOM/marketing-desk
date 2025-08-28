@@ -245,7 +245,10 @@ const DeskBooking: React.FC = () => {
     return !getUserReservationForDate();
   };
 
-  const handleLogin = (name: string, email: string) => {
+  const handleLogin = (email: string, password: string) => {
+    // Extract name from email (before @sicoob.com.br)
+    const name = email.split('@')[0];
+    
     const user: User = {
       id: email, // Use email as ID
       name,
@@ -302,10 +305,7 @@ const DeskBooking: React.FC = () => {
               <div className="d-flex align-items-center gap-3">
                 <div className="d-flex align-items-center">
                   <User className="mr-2" size={20} />
-                  <div className="d-flex flex-column">
-                    <span className="font-weight-medium">{currentUser.name}</span>
-                    <small className="text-brand-light/80">{currentUser.email}</small>
-                  </div>
+                  <span className="font-weight-medium">{currentUser.name}</span>
                 </div>
                 <Button
                   variant="ghost"
@@ -372,10 +372,10 @@ const DeskBooking: React.FC = () => {
                       variant={selectedDate === date ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setSelectedDate(date)}
-                      className="mb-2 d-flex flex-column align-items-center px-3 py-2"
+                      className="mb-2 flex flex-col items-center px-2 py-3 min-w-[80px] text-center"
                     >
-                      <span className="font-weight-bold">{getDayName(date)}</span>
-                      <span className="small">{formatDate(date)}</span>
+                      <span className="font-medium text-xs">{getDayName(date)}</span>
+                      <span className="text-xs mt-1">{formatDate(date).split('/').slice(0,2).join('/')}</span>
                       {isToday(date) && (
                         <Badge variant="secondary" className="mt-1 px-1 py-0 text-xs">
                           Hoje
