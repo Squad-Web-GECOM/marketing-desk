@@ -78,14 +78,17 @@ const DeskBooking: React.FC = () => {
     let daysAdded = 0;
     let i = 0;
     
-    while (daysAdded < 6) {
+    // Generate 6 weekdays starting from today
+    while (daysAdded < 6 && i < 14) { // Add safety limit to prevent infinite loop
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       
-      // Check if it's a weekday (Monday = 1, Friday = 5)
+      // Check if it's a weekday (Monday = 1, Tuesday = 2, Wednesday = 3, Thursday = 4, Friday = 5)
+      // Sunday = 0, Saturday = 6 should be excluded
       const dayOfWeek = date.getDay();
       if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-        dates.push(date.toISOString().split('T')[0]);
+        const dateString = date.toISOString().split('T')[0];
+        dates.push(dateString);
         daysAdded++;
       }
       i++;
