@@ -88,7 +88,7 @@ const DeskBooking: React.FC = () => {
       // Check if it's a weekday (Monday = 1, Tuesday = 2, Wednesday = 3, Thursday = 4, Friday = 5)
       // Sunday = 0, Saturday = 6 should be excluded
       const dayOfWeek = date.getDay();
-      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+      if (dayOfWeek >= 2 && dayOfWeek <= 6) {
         const dateString = date.toISOString().split('T')[0];
         dates.push(dateString);
         daysAdded++;
