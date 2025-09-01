@@ -353,26 +353,6 @@ const DeskBooking: React.FC = () => {
           </CardHeader>
           <CardContent className="p-4">
             <div className="row">
-              <div className="col-12 mb-3">
-                <div className="d-flex flex-wrap gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedDate(availableDates[0] || '')}
-                    className="mr-2 mb-2"
-                  >
-                    Hoje
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedDate(availableDates[availableDates.length - 1] || '')}
-                    className="mb-2"
-                  >
-                    Próxima semana
-                  </Button>
-                </div>
-              </div>
               <div className="col-12">
                 <div className="d-flex flex-wrap gap-2">
                   {availableDates.map((date) => (
