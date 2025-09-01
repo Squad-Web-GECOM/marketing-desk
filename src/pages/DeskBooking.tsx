@@ -74,7 +74,9 @@ const DeskBooking: React.FC = () => {
 
   const generateAvailableDates = () => {
     const dates: string[] = [];
+    // Use Brazilian timezone to get correct current date
     const today = new Date();
+    today.setHours(today.getHours() - 3); // Convert UTC to Brazil timezone (UTC-3)
     let daysAdded = 0;
     let i = 0;
     
