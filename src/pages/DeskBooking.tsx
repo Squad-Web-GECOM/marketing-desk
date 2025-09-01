@@ -4,7 +4,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, CheckCircle2, Calendar, User, MapPin, LogOut, Building2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AlertCircle, CheckCircle2, Calendar, User, MapPin, LogOut, Building2, Map } from 'lucide-react';
 import LoginModal from '@/components/LoginModal';
 
 // Types
@@ -41,6 +42,22 @@ const DeskBooking: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null);
+
+  // Function to convert desk number to desk name with bay lines
+  const getDeskName = (deskNumber: number): string => {
+    if (deskNumber >= 1 && deskNumber <= 3) {
+      return `Mesa A${deskNumber}`;
+    } else if (deskNumber >= 4 && deskNumber <= 7) {
+      return `Mesa B${deskNumber - 3}`;
+    } else if (deskNumber >= 8 && deskNumber <= 12) {
+      return `Mesa C${deskNumber - 7}`;
+    } else if (deskNumber >= 13 && deskNumber <= 18) {
+      return `Mesa D${deskNumber - 12}`;
+    } else if (deskNumber >= 19 && deskNumber <= 22) {
+      return `Mesa E${deskNumber - 18}`;
+    }
+    return `Mesa ${deskNumber}`;
+  };
 
   // Initialize user and dates
   useEffect(() => {
@@ -177,7 +194,7 @@ const DeskBooking: React.FC = () => {
 
       setMessage({
         type: 'success',
-        text: `Reserva confirmada na mesa ${deskNumber} para ${formatDate(selectedDate)}.`
+        text: `Reserva confirmada na ${getDeskName(deskNumber)} para ${formatDate(selectedDate)}.`
       });
       
       await loadReservations();
@@ -211,7 +228,7 @@ const DeskBooking: React.FC = () => {
 
       setMessage({
         type: 'success',
-        text: `Reserva cancelada na mesa ${deskNumber}.`
+        text: `Reserva cancelada na ${getDeskName(deskNumber)}.`
       });
       
       await loadReservations();
@@ -386,6 +403,30 @@ const DeskBooking: React.FC = () => {
           </CardContent>
         </Card>
 
+        {/* Map Button */}
+        <div className="mb-6 text-center">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="lg" className="px-6 py-3">
+                <Map className="mr-2" size={20} />
+                Verifique o Mapa das Mesas
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+              <DialogHeader>
+                <DialogTitle>Mapa das Mesas - Marketing</DialogTitle>
+              </DialogHeader>
+              <div className="flex justify-center items-center p-4">
+                <img 
+                  src="https://squad-web-gecom.github.io/marketing-desk/mapa-mesas-marketing.jpg" 
+                  alt="Mapa das mesas do setor de marketing"
+                  className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg"
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
         {/* Desk Grid */}
         {selectedDate && (
           <Card className="border-0 shadow-sm">
@@ -425,7 +466,7 @@ const DeskBooking: React.FC = () => {
                           <CardHeader className="pb-2">
                             <div className="d-flex justify-content-between align-items-center">
                               <CardTitle className="h5 mb-0">
-                                Mesa {desk.number}
+                                {getDeskName(desk.number)}
                               </CardTitle>
                               <Badge 
                                 variant={
