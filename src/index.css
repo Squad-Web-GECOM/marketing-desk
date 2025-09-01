@@ -113,18 +113,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* Brand Color Overrides with !important */
-@layer utilities {
-  .bg-primary {
-    background-color: hsl(var(--primary)) !important;
-  }
-  
-  .text-primary {
-    color: hsl(var(--primary)) !important;
-  }
-  
-  .border-primary {
-    border-color: hsl(var(--primary)) !important;
-  }
-}
