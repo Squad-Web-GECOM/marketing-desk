@@ -8,17 +8,17 @@ $danger: #dc3545;
 $muted: #6c757d;
 
 // Bootstrap variable overrides
-$theme-colors: (
-  "primary": $primary,
-  "dark": $dark,
-  "light": $light,
-  "success": $success,
-  "warning": $warning,
-  "danger": $danger,
+$theme-colors: ("primary": $primary,
+    "dark": $dark,
+    "light": $light,
+    "success": $success,
+    "warning": $warning,
+    "danger": $danger,
 );
 
 body {
     background-color: #f8f9fa;
+    color: $dark;
 }
 
 #app {
@@ -34,18 +34,30 @@ body {
 
 .desk-card {
     transition: all 0.3s ease-in-out;
+
+    .card {
+        &-body {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+    }
+
     &.available {
         border-color: $primary;
-        background-color: lighten($primary, 45%);
+        background-color: lighten($primary, 63%);
+
         &:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
             transform: translateY(-2px);
         }
     }
+
     &.occupied {
         background-color: #f8f9fa;
         border-color: #dee2e6;
     }
+
     &.my-reservation {
         border-color: $success;
         background-color: lighten($success, 40%);

@@ -1,91 +1,105 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento de Mesas - Marketing</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="dist/css/style.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://squad-web-gecom.github.io/sicoob-styles/sicoob-style.css">
+    <link rel="stylesheet" href="src/scss/style.css">
 </head>
-<body>
 
-    <div id="login-view">
-        <div class="container vh-100 d-flex justify-content-center align-items-center">
-            <div class="card shadow-sm" style="width: 22rem;">
-                <div class="card-body p-4">
-                    <h5 class="card-title text-center mb-4">Login</h5>
-                    <form id="login-form">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="seuemail@sicoob.com.br" required>
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<body class="">
 
-    <div id="app-view" style="display: none;">
-        <header class="header py-3">
-            <div class="container d-flex justify-content-between align-items-center">
-                <h1 class="h4 mb-0">Ferramenta de agendamento de mesas da área de marketing</h1>
-                <div>
-                    <span class="me-3">Olá, <span id="user-name"></span></span>
-                    <button id="logout-btn" class="btn btn-sm btn-outline-light">Sair</button>
-                </div>
-            </div>
-        </header>
-        <main class="container py-4">
-            <div id="alert-container"></div>
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">
-                    <h5>Selecionar Data</h5>
-                </div>
-                <div class="card-body">
-                    <div id="date-selector" class="d-flex flex-wrap gap-2">
-                        <!-- Dates will be populated by app.js -->
+    <section class="acland">
+        <div id="login-view">
+            <div class="container vh-100 d-flex justify-content-center align-items-center">
+                <div class="card h-fit-content shadow-sm" style="width: 22rem;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-center mb-4">Login</h5>
+                        <form id="login-form">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="seuemail@sicoob.com.br"
+                                    required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="text-center mb-4">
-                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
-                    Verifique o Mapa das Mesas
-                </button>
-            </div>
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h5>Mesas Disponíveis - <span id="selected-date-display"></span></h5>
+        </div>
+
+        <div id="app-view" style="display: none;">
+            <header class="header py-3">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <h4 class="c-light text-balance mb-0">Ferramenta de agendamento de mesas da área de marketing</h4>
+                    <div class="center-s">
+                        <span class="me-3">Olá, <span id="user-name"></span></span>
+                        <button id="logout-btn" class="btn btn-sm btn-outline-light">Sair</button>
+                    </div>
                 </div>
-                <div id="desk-grid" class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Carregando...</span>
+            </header>
+            <main class="container py-4">
+                <div id="alert-container"></div>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5>Selecionar Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="date-selector" class="d-flex flex-wrap gap-2">
+                            <!-- Dates will be populated by app.js -->
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    </div>
-
-    <div class="modal fade map-modal" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mapModalLabel">Mapa das Mesas - Marketing</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                        Verifique o Mapa das Mesas
+                    </button>
                 </div>
-                <div class="modal-body text-center">
-                    <img src="https://squad-web-gecom.github.io/marketing-desk/mapa-mesas-marketing.jpg" class="img-fluid" alt="Mapa das mesas">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5>Mesas Disponíveis - <span id="selected-date-display"></span></h5>
+                    </div>
+                    <div id="desk-grid" class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div class="modal fade map-modal" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapModalLabel">Mapa das Mesas - Marketing</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="https://squad-web-gecom.github.io/marketing-desk/mapa-mesas-marketing.jpg"
+                            class="img-fluid" alt="Mapa das mesas">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="dist/js/app.js"></script>
+    <script src="src/js/app.js"></script>
 </body>
+
 </html>

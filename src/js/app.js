@@ -68,7 +68,7 @@
     function renderDateSelector() {
         selectedDateDisplay.text(formatDate(selectedDate));
         const datesHtml = availableDates.map(date => `
-            <button class="btn btn-outline-primary date-selector-btn ${selectedDate === date ? 'active' : ''}" data-date="${date}">
+            <button class="btn btn-secondary date-selector-btn ${selectedDate === date ? 'active' : ''}" data-date="${date}">
                 ${formatDate(date)}
             </button>
         `).join('');
@@ -102,12 +102,12 @@
             } else if (isOccupied) {
                 cardClass = 'occupied';
                 statusText = `Ocupada por ${reservation.user_name}`;
-                buttonHtml = '<button class="btn btn-sm btn-secondary" disabled>Ocupada</button>';
+                buttonHtml = '<button class="btn btn-sm btn-dark" disabled>Ocupada</button>';
             } else if (canBook) {
                 buttonHtml = `<button class="btn btn-sm btn-primary make-reservation-btn" data-desk-number="${desk.number}">Reservar</button>`;
             } else {
                  cardClass = 'occupied';
-                buttonHtml = '<button class="btn btn-sm btn-secondary" disabled>Indisponível</button>';
+                buttonHtml = '<button class="btn btn-sm btn-dark" disabled>Indisponível</button>';
             }
 
             return `
@@ -123,7 +123,7 @@
             `;
         }).join('');
 
-        deskGrid.html(`<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">${desksHtml}</div>`);
+        deskGrid.html(`<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-row-4">${desksHtml}</div>`);
         $('.make-reservation-btn').on('click', handleMakeReservation);
         $('.cancel-reservation-btn').on('click', handleCancelReservation);
     }

@@ -1,0 +1,49 @@
+body {
+  background-color: #f8f9fa;
+  color: #003641;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #003641;
+  color: #FFFFFF;
+}
+
+.desk-card {
+  transition: all 0.3s ease-in-out;
+}
+.desk-card .card-body {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.desk-card.available {
+  border-color: #00AE9D;
+  background-color: rgb(240.3, 255, 253.5637931034);
+}
+.desk-card.available:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+.desk-card.occupied {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+.desk-card.my-reservation {
+  border-color: #28a745;
+  background-color: rgb(175.1304347826, 235.8695652174, 189);
+}
+
+.date-selector-btn.active {
+  background-color: #00AE9D;
+  border-color: #00AE9D;
+}
+
+.map-modal .modal-dialog {
+  max-width: 800px;
+}/*# sourceMappingURL=style.css.map */
