@@ -15,13 +15,13 @@
 <body class="">
 
     <section class="acland">
-    
+
         <div id="app-view">
             <header class="header bg-dark py-3">
                 <div class="container d-flex justify-content-between align-items-center">
                     <h4 class="c-light text-balance mb-0">Ferramenta de agendamento de mesas da área de marketing</h4>
                     <div class="center-s">
-                        <span class="me-3">Olá, <span id="user-name"></span></span>
+                        <span class="me-3">Olá, <span id="user-name" class="fw-800"></span></span>
                     </div>
                 </div>
             </header>
@@ -38,9 +38,22 @@
                     </div>
                 </div>
                 <div class="text-center mb-4">
-                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                    <button class="btn btn-primary btn-dark" type="button" data-toggle="collapse" data-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">
                         Verifique o Mapa das Mesas
                     </button>
+                    
+                    <div class="collapse pt-4" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="card-header">
+                                <h5 class="card-title" id="mapCardLabel">Mapa das Mesas - Marketing</h5>
+                            </div>
+                            <div class="card-img text-center">
+                                <img src="/documents/184894079/290352049/mapa-mesas-marketing.jpg" class="img-fluid"
+                                    alt="Mapa das mesas">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card shadow-sm">
                     <div class="card-header">
@@ -57,21 +70,7 @@
             </main>
         </div>
 
-        <div class="modal fade map-modal" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="mapModalLabel">Mapa das Mesas - Marketing</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="https://squad-web-gecom.github.io/marketing-desk/mapa-mesas-marketing.jpg"
-                            class="img-fluid" alt="Mapa das mesas">
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </section>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -87,4 +86,5 @@
     window.email = "joao.vidal@sicoob.com.br";
     window.localPart = "joao.vidal";
 </script>
+
 </html>

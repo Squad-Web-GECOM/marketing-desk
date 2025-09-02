@@ -147,7 +147,7 @@
       }
 
       return `
-        <div class="col">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
           <div class="card h-100 desk-card ${cardClass}">
             <div class="card-body">
               <h5 class="card-title">${getDeskName(desk.number)}</h5>
@@ -159,7 +159,7 @@
       `;
     }).join('');
 
-    deskGrid.html(`<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap-row-4">${desksHtml}</div>`);
+    deskGrid.html(`<div class="row gap-row-4">${desksHtml}</div>`);
     $('.make-reservation-btn').on('click', handleMakeReservation);
     $('.cancel-reservation-btn').on('click', handleCancelReservation);
   }
@@ -167,7 +167,7 @@
   // Eventos
   function handleDateSelect(e) {
     selectedDate = $(e.currentTarget).data('date');
-    deskGrid.html('<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Carregando...</span></div></div>');
+    deskGrid.html('<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">&nbsp;</span></div></div>');
     loadReservations().then(renderDesks);
   }
 

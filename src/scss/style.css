@@ -18,9 +18,13 @@ body {
   transition: all 0.3s ease-in-out;
 }
 .desk-card .card-body {
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+}
+.desk-card .card-text {
+  margin: 0 !important;
 }
 .desk-card.available {
   border-color: #00AE9D;
